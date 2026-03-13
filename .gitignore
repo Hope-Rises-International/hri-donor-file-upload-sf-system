@@ -1,3 +1,13 @@
+# Runtime I/O
+Claude Non Donor Files/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
 # Environment and secrets
 .env
 .env.*

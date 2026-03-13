@@ -2,9 +2,27 @@
 
 ## About this project
 
-<!-- Replace this section with a brief description of what this project is,
-     how it's deployed, and what systems it connects to. Keep it to 5-10 lines.
-     This is the first thing a new session reads — make it count. -->
+**hri-donor-file-upload-sf-system** — Aegis Non Donor CSV pipeline for Hope Rises International.
+
+Replaces the CoWork browser-automation workflow that processes Aegis (Moore DM Group) Non Donor CSV files. The CoWork version navigated Chrome to paste data into Google Sheets — fragile and slow. This pipeline runs as Python, writes to Google Sheets via API, and produces clean output files with zero browser dependency.
+
+- **Phase A (this build):** Local CSV → Python triage → Kill List Google Sheet (API write) + cleaned Non Donor CSV output
+- **Phase B (future):** Cloud Run + Cloud Scheduler → SFTP pull → auto-triage → email notification
+- **Phase C (future):** Salesforce REST API push → replace Data Loader entirely
+
+**Kill List Sheet ID:** `11dM2Pf-E195rJUnF79rMHhN5RUb0L-03fS8nZ4WZw7o`
+**GCP Project:** `gmail-agent-489116`
+**Service Account:** `hri-automation@gmail-agent-489116.iam.gserviceaccount.com`
+
+### Authentication
+
+Uses Application Default Credentials (ADC) via service account impersonation:
+```bash
+gcloud auth application-default login \
+  --client-id-file="$HOME/Downloads/hri-oauth-client.json" \
+  --scopes="https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/drive,https://www.googleapis.com/auth/spreadsheets"
+```
+ADC credentials at: `~/.config/gcloud/application_default_credentials.json`
 
 ## Stack Learnings (canonical source)
 
@@ -18,23 +36,17 @@ Do NOT create a local `learnings.md` or `hri-stack-learnings.md` in this repo. I
 
 ## Project knowledge
 
-<!-- This section grows over time. Every session that makes meaningful changes
-     should append what it learned. This is where compound value accrues.
-
-     Good entries answer: What would the NEXT session need to know?
-     - Decisions made and WHY (not just what changed — git log has that)
-     - Things that are fragile or non-obvious
-     - What was tried and didn't work (so nobody tries it again)
-     - Patterns discovered in the data or the APIs
-     - Gotchas that aren't obvious from reading the code
-
-     Bad entries: "Updated foo.py" (that's a commit message, not knowledge) -->
+**[2026-03-13 | Bill | Initial repo setup and build plan]**
+- **Decided:** Phase A build plan finalized from Aegis_NonDonor_Pipeline_Build_Spec. Python script with Google Sheets API integration. No browser automation.
+- **Changed:** Created repo from template, added build spec, wrote Phase A implementation plan.
+- **Watch out:** Before building, need sample Non Donor CSV files from Aegis to validate column headers and triage logic. Service account needs editor access on Kill List sheet (ID: `11dM2Pf-E195rJUnF79rMHhN5RUb0L-03fS8nZ4WZw7o`).
+- **Open:** Phase A build not started — plan is ready, need sample CSV files and SA sheet access verified before coding begins. See `docs/build-plan.md` for the full implementation plan.
 
 ---
 
 ## Session Start
 
-Before beginning work, check the most recent Project Knowledge entry below. If it contains an "Open" field, surface the open items to the user and confirm whether to continue that work or start something new.
+Before beginning work, check the most recent Project Knowledge entry above. If it contains an "Open" field, surface the open items to the user and confirm whether to continue that work or start something new.
 
 ---
 
